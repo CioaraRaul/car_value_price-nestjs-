@@ -17,19 +17,37 @@ describe('Authentication System', () => {
   });
 
   it('handles a signup request', () => {
-    const email = 'testa@test.com';
+    const email = `test${Date.now()}@test.com`;
 
     return request(app.getHttpServer())
       .post('/auth/signup')
       .send({
-        email: email,
+        email,
         password: 'testpassword',
       })
       .expect(201)
       .then((res) => {
-        const { id, email } = res.body;
+        const { id, email: returnedEmail } = res.body;
         expect(id).toBeDefined();
-        expect(email).toEqual(email);
+        expect(returnedEmail).toEqual(email);
       });
+  });
+
+  it('signup as a new user then get the currently logged in user', async () => {
+    const email = 'testa@test.com';
+
+    const res = await request(app.getHttpServer())
+      .post('/auth/signup')
+      .send({ email, password: 'testpassword' })
+      .expect(201);
+
+    const cookie = res.get('Set-Cookie') as string[];
+
+    const { body } = await request(app.getHttpServer())
+      .get('/auth/whoami')
+      .set('Cookie', cookie)
+      .expect(200);
+
+    expect(body.email).toEqual(email);
   });
 });
