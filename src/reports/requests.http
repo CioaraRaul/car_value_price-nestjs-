@@ -2,12 +2,19 @@ POST http://localhost:3000/reports
 Content-Type: application/json
 
 {
-    "make": "toyoda",
-    "model": "corola",
-    "year": 1987,
-    "mileage": 1000,
-    "lng" : 0,
-    "lat": 2,
-    "price":10
+  "make": "toyoda",
+  "model": "corola",
+  "year": 1987,
+  "mileage": 1000,
+  "lng": 0,
+  "lat": 2,
+  "price": 10
+}
 
- }
+###
+PATCH http://localhost:3000/reports/6
+Content-Type: application/json
+
+{
+  "approved": true
+}
