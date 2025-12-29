@@ -48,12 +48,18 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   ],
 })
 export class AppModule {
+  constructor(private configService: ConfigService) {}
+
   configure(consumer: MiddlewareConsumer) {
     // You can apply middleware here if needed
+    const cookieKey = this.configService.get<string>('COOKIE_KEY');
+    if (!cookieKey) {
+      throw new Error('COOKIE_KEY is not set in environment');
+    }
     consumer
       .apply(
         cookieSession({
-          keys: ['asdfasfd'],
+          keys: [cookieKey],
         }),
       )
       .forRoutes('*');
