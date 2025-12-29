@@ -22,17 +22,24 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     //   entities: [User, Report],
     //   synchronize: true,
     // }),
-    TypeOrmModule.forRootAsync({
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => {
-        return {
-          type: 'sqlite',
-          database: config.get<string>('DB_NAME'),
-          entities: [User, Report],
-          synchronize: true,
-        };
-      },
+    // TypeOrmModule.forRootAsync({
+    //   inject: [ConfigService],
+    //   useFactory: (config: ConfigService) => {
+    //     return {
+    //       type: 'sqlite',
+    //       database: config.get<string>('DB_NAME'),
+    //       entities: [User, Report],
+    //       synchronize: true,
+    //     };
+    //   },
+    // }),
+    TypeOrmModule.forRoot({
+      type: 'sqlite',
+      database: 'db.sqlite',
+      entities: [User, Report],
+      synchronize: false,
     }),
+
     UsersModule,
     ReportsModule,
   ],
